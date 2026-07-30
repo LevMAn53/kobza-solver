@@ -1,11 +1,11 @@
 // node test.js — checks the two edge cases by hand, then simulates full games.
 
 const fs = require('fs')
-const { recommend, filterCandidates, scoreGuess } = require('./solver.js')
+const { cleanDictionary, recommend, filterCandidates, scoreGuess } = require('./solver.js')
 
 const window = {}
 eval(fs.readFileSync(__dirname + '/words.js', 'utf8'))
-const WORDS = window.VALID_WORDS
+const WORDS = cleanDictionary(window.VALID_WORDS)
 
 function assert(label, cond) {
   console.log(`${cond ? 'ok  ' : 'FAIL'}  ${label}`)
@@ -27,6 +27,12 @@ const doubled = [...WORDS].find(w => new Set(w).size === 4)
 assert(`repeated letter counted once (${doubled})`,
   Math.abs(scoreWord(doubled, freq) -
     [...new Set(doubled)].reduce((s, c) => s + freq.get(c), 0)) < 1e-12)
+
+// --- dictionary is clean ------------------------------------------------------
+assert(`every entry is 5 letters (${WORDS.length} words)`,
+  WORDS.every(w => [...w].length === 5))
+assert(`opening guess is a real word (${recommend(WORDS)})`,
+  [...recommend(WORDS)].length === 5)
 
 // --- full-game simulation ----------------------------------------------------
 function solve(answer, maxTurns = 6) {

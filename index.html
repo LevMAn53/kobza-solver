@@ -74,7 +74,7 @@
 <script>
 const CYCLE = ['black', 'yellow', 'green']
 
-let candidates = window.VALID_WORDS
+let candidates = cleanDictionary(window.VALID_WORDS)
 let guess = recommend(candidates)
 let colors = new Array(5).fill('black')
 

@@ -1,6 +1,13 @@
 // Кобза solver — scoring and filtering.
 // Pure functions, no DOM. Loaded by index.html and by test.js.
 
+// words.js is upstream's file verbatim, and it carries section markers
+// (*топонiми*, *власнi назви*, *custom*) inline with the words. Drop anything
+// that isn't a plain five-letter entry.
+function cleanDictionary(raw) {
+  return raw.filter(word => [...word].length === 5 && !word.includes('*'))
+}
+
 // Fraction of words containing each letter. A letter is counted once per word
 // however many times it appears, so a doubled letter earns no extra credit.
 function letterFrequencies(words) {
@@ -109,5 +116,5 @@ function scoreGuess(guess, answer) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { letterFrequencies, scoreWord, recommend, filterCandidates, scoreGuess }
+  module.exports = { cleanDictionary, letterFrequencies, scoreWord, recommend, filterCandidates, scoreGuess }
 }
